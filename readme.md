@@ -1,113 +1,112 @@
-# 🌙 مشروع مصداق (Misdaq Telegram Bot)
+# 🕊️ بوت مصداق | Misdaq Telegram Bot
 
-> **بوت تليجرام ذكي للتحقق من صحة الأحاديث النبوية باستخدام الذكاء الاصطناعي ومصادر السُّنّة المعتمدة.**
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.11+-blue.svg" alt="Python Version">
+  <img src="https://img.shields.io/badge/Framework-Flask%20%7C%20python--telegram--bot-green" alt="Frameworks">
+  <img src="https://img.shields.io/badge/AI Engine-Dify%20%7C%20GPT--4o-orange" alt="AI Engine">
+  <img src="https://img.shields.io/badge/Deployment-Render-brightgreen" alt="Deployment">
+  <img src="https://img.shields.io/badge/Status-Live%2024%2F7-success" alt="Status">
+</p>
 
-## 📌 نبذة عن المشروع (Overview)
+[العربية](#-باللغة-العربية) | [English](#-english)
 
-**مصداق** هو بوت تليجرام تفاعلي يهدف إلى مساعدة المستخدمين على التحقق من صحة الأحاديث النبوية وشرحها وشواهدها بطريقة دقيقة وسريعة. يعتمد البوت على دمج تقنيات الذكاء الاصطناعي عبر منصة **Dify** ونماذج **OpenAI (GPT-4o)** مع مصادر وبيانات حديثية موثوقة (قواعد بيانات كملفات CSV وربط مع API موسوعة الأحاديث النبوية).
+---
 
-## 🏗️ البنية البرمجية والتقنيات المستخدمة (Architecture & Tech Stack)
+## 🇸🇦 باللغة العربية
 
-* **لغة البرمجة:** Python 3.11+
+### 🤖 تجربة البوت مباشرة
+يمكنك تجربة وتصفح البوت مباشرة عبر التليجرام:
+👉 **[اضغط هنا للتحدث مع بوت مصداق على Telegram (@MisdaqHadithbot)](https://t.me/MisdaqHadithbot)**
 
-* **واجهة التفاعل (Frontend / Interface):** Telegram Bot API (`python-telegram-bot`)
+---
 
-* **منصة الذكاء الاصطناعي (AI Orchestration):** [Dify.ai](https://dify.ai) (مخطط سير العمل Chatflow)
+### 📌 عن المشروع
+**بوت مصداق (Misdaq Bot)** هو بوت تليجرام ذكي يهدف إلى **التحقق من صحة الأحاديث النبوية الشريفة** والتمييز بين الأحاديث الصحيحة والأحاديث الضعيفة أو الموضوعة. يعتمد البوت على تقنيات الذكاء الاصطناعي المتقدمة وربطه بقواعد بيانات معتمدة لتقديم إجابات دقيقة وموثوقة للمستخدمين على مدار الساعة (24/7).
 
-* **الموديل اللغوي (LLM):** OpenAI GPT-4o
+---
 
-* **مصادر البيانات والمعالجة (Data Sources & APIs):**
+### 🧱 البنية البرمجية والتقنيات المستخدمة
 
-  * **قواعد بيانات محليّة (CSV Files):** استعلام وحقن المعرفة المخصصة للأحاديث الضعيفة والموضوعة كـ Knowledge Base داخل Dify.
+1. **Telegram Bot (`python-telegram-bot`)**: الواجهة البرمجية المباشرة مع المستخدمين لتلقي الأسئلة والأحاديث وإرسال النتائج بشكل منسق.
+2. **Dify Chatflow & Knowledge Base**: المحرك الأساسي للتحقق وإدارة التدفق:
+   * **القاعدة المعرفية (Knowledge Base)**: فحص الأحاديث الضعيفة والموضوعة المرفوقة عبر ملفات `CSV`.
+   * **HTTP Request Node**: الربط المباشر مع API موسوعة الأحاديث النبوية (**HadeethEnc API**) لفحص الأحاديث الصحيحة وإصدار الحكم الدقيق عليها.
+   * **GPT-4o**: نموذج الذكاء الاصطناعي لتحليل النصوص، صياغة النتائج، واستخراج الإجابات النهائية ودواعي الحكم بوضوح.
+3. **Flask Server Wrapper**: سيرفر ويب مصغر يعمل بالتوازي مع البوت لضمان استمرار تشغيل الخدمة على الاستضافة المجانية بدون انقطاع.
+4. **Render.com Deployment**: الاستضافة السحابية المجانية لضمان عمل الخدمة 24/7 مع تأمين التوكنات عبر المتغيرات البيئية (Environment Variables).
 
-  * **API موسوعة الأحاديث النبوية (HadeethEnc API):** جلب التخريج والدرجة وشرح الحديث ديناميكياً بواسطة node HTTP Request داخل Dify.
+---
 
-* **الخادم والاستضافة (Deployment & Hosting):**
+### 📂 مجلد البيانات والقاعدة المعرفية (Data & Knowledge Base)
+تم إتاحة ملفات البيانات الخاصة بالأحاديث الضعيفة والموضوعة بشكل علني للجميع للتحقق والتدقيق المباشر من صحة المحتوى:
 
-  * **Render.com:** خادم سحابي مجاني يعمل كـ `Web Service` لتشغيل البوت 24/7 دون انقطاع.
+* 📁 **[استعراض مجلد البيانات العلني (data/)](./data)**
+  * يحتوي على ملفات `CSV` تضم قوائم الأحاديث المفهرسة والمستخدمة في قاعدة Dify المعرفية.
 
-  * **Flask Web Server:** خادم وهمي مدمج داخل كود البايثون لإبقاء بيئة Render في حالة نشطة (`Live`).
+---
 
-## 🔄 كيف يعمل النظام؟ (System Workflow)
+### 🚀 كيفية التشغيل والرفع (Deployment)
 
-1. **استقبال الطلب:** يرسل المستخدم نص الحديث أو جزءاً منه عبر بوت التليجرام.
+#### المتغيرات البيئية المطلوب ضبطها (Environment Variables):
+يتم ضبط هذه المتغيرات في منصة **Render** تحت قسم `Environment`:
 
-2. **التوجيه إلى Dify:** يقوم كود Python في البوت بتحويل النص إلى خافية Dify عبر الـ API.
+* `TELEGRAM_TOKEN`: توكن البوت الصادر من BotFather.
+* `DIFY_API_KEY`: مفتاح الـ API الخاص بتطبيق Dify.
 
-3. **معالجة Dify Chatflow:**
+#### ملفات الإعداد:
+* **`Procfile`**: يحتوي على أمر بدء السيرفر `web: python main.py`.
+* **`requirements.txt`**: يحتوي على المكتبات المطلوبة (`flask`, `python-telegram-bot`, `requests`, `gunicorn`).
 
-   * **البحث في الـ Knowledge Base (CSV):** البحث أولاً بداخل قاعدة بيانات الأحاديث الضعيفة/الموضوعة.
+---
 
-   * **الاستعلام عن HadeethEnc API:** البحث عن الحديث عبر API موسوعة الأحاديث للوصول للدرجة والتخريج الرسمي.
+<br>
 
-   * **الصياغة باستخدام GPT-4o:** يدمج نموذج GPT-4o النتائج ويصيغ إجابة واضحة وموثوقة تشمل (نص الحديث، الدرجة، الحكم، والشرح).
+---
 
-4. **إعادة الرد:** يستقبل كود البايثون المخرجات من Dify ويرسلها كإجابة منسقة للمستخدم على التليجرام.
+## 🇬🇧 English
 
-## 📁 هيكل المشروع (Project Structure)
+### 🤖 Live Demo & Usage
+You can interact with the live bot on Telegram directly:
+👉 **[Click here to chat with Misdaq Bot on Telegram (@MisdaqHadithbot)](https://t.me/MisdaqHadithbot)**
 
-```
-misdaq-telegram-bot/
-├── main.py              # الكود الرئيسي لتشغيل سيرفر Flask وبوت التليجرام
-├── requirements.txt     # ملف المكتبات المتطلبة لتشغيل المشروع
-├── Procfile             # ملف التوجيه الخاص بـ Render لتشغيل تطبيق الويب
-├── .gitignore           # استبعاد الملفات الحساسة والتنفيذية من GitHub
-└── README.md            # التوثيق الشامل للمشروع
+---
 
-```
+### 📌 Overview
+**Misdaq Bot** is an AI-powered Telegram bot designed to **verify Hadiths** and distinguish authentic Hadiths (*Sahih*) from weak or fabricated ones (*Da'if / Mawdoo'*). The system utilizes modern AI Orchestration (Dify Chatflow) and integrates with trusted Hadith encyclopedias to provide instant, reliable answers 24/7.
 
-## 🔐 المتغيرات البيئية (Environment Variables)
+---
 
-لتشغيل المشروع بأمان، يتم ضبط المتغيرات البيئية التالية عبر منصة الاستضافة (Render) دون تضمينها في الكود:
+### 🏗️ Architecture & Stack
 
-| **اسم المتغير (Key)** | **الوصف (Description)** | 
-| `TELEGRAM_TOKEN` | توكن البوت المستخرج من BotFather | 
-| `DIFY_API_KEY` | مفتاح الـ API الخاص بـ Dify Chatflow | 
+1. **Telegram Interface**: Built with `python-telegram-bot` to handle user interactions smoothly.
+2. **Dify Chatflow Engine**:
+   * **Knowledge Base**: Indexed `CSV` files containing weak and fabricated Hadiths for instant vector search.
+   * **HadeethEnc API (HTTP Node)**: Real-time queries to official Hadith databases for authentic Hadiths.
+   * **GPT-4o LLM**: Evaluates context, parses API JSON responses, and generates accurate, well-formatted explanations.
+3. **Flask Web Wrapper**: Runs concurrently with the Telegram bot polling loop to satisfy Render's HTTP health checks and keep the free tier active.
+4. **Render.com**: Cloud hosting environment operating 24/7 with zero-downtime using secure Environment Variables.
 
-## 🚀 طريقة التشغيل المحلي (Local Setup)
+---
 
-1. **استคลون المستودع:**
+### 📂 Open Knowledge Base Data
+All `CSV` dataset files used to train/index the Dify Knowledge Base are publicly available for inspection and verification:
 
-   ```
-   git clone https://github.com/RiriDevv/misdaq-telegram-bot.git
-   cd misdaq-telegram-bot
-   
-   ```
+* 📁 **[Browse Public Data Folder (data/)](./data)**
 
-2. **تثبيت المكتبات:**
+---
 
-   ```
-   pip install -r requirements.txt
-   
-   ```
+### ⚙️ Environment & Setup
 
-3. **تعيين المتغيرات البيئية (في بيئتك المحليه أو في ملف `.env`):**
+#### Environment Variables Required:
+Configure these inside **Render -> Environment**:
 
-   ```
-   set TELEGRAM_TOKEN=your_telegram_bot_token
-   set DIFY_API_KEY=your_dify_api_key
-   
-   ```
+* `TELEGRAM_TOKEN`: Bot authentication token provided by Telegram's BotFather.
+* `DIFY_API_KEY`: API access key for the Dify Chatflow application.
 
-4. **تشغيل البوت:**
+#### Execution Entrypoint:
+* **Procfile**: `web: python main.py`
 
-   ```
-   python main.py
-   
-   ```
-
-## 🌐 النشر والاستضافة (Deployment on Render)
-
-تم نشر هذا المشروع بنجاح على منصة **Render** بالخطوات التالية:
-
-1. ربط مستودع GitHub بـ Render كـ **Web Service** مجاني (`Free Tier`).
-
-2. تحديد أمر البناء (Build Command): `pip install -r requirements.txt`.
-
-3. تحديد أمر التشغيل (Start Command): `python main.py`.
-
-4. إدخال المتغيرات البيئية من تبويب `Environment` للحفاظ على سرية البيانات.
-
-## 📝 الترخيص (License)
-
-هذا المشروع متاح للاستخدام والبحث العلمي والتطوير المجتمعي.
+---
+<p align="center">
+Developed with ❤️ for verifying and spreading authentic Islamic knowledge.
+</p>
