@@ -12,6 +12,25 @@ from telegram.ext import (
     filters,
 )
 
+import threading
+import os
+from flask import Flask
+
+# إنشاء تطبيق وهمي لـ Render
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Bot is running!"
+
+def run_web():
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host="0.0.0.0", port=port)
+
+# تشغيل سيرفر الويب في خلفية مستقلة قبل تشغيل البوت
+threading.Thread(target=run_web, daemon=True).start()
+
+# --- هنا يكمل كود البوت الخص بك (run_polling ... إلخ) ---
 # ==========================================
 # 1. إعداد المفاتيح والروابط
 # ==========================================
