@@ -1,7 +1,7 @@
-
-
 import os
+import threading
 import requests
+from flask import Flask
 from telegram import Update
 from telegram.constants import ChatAction
 from telegram.ext import (
@@ -12,27 +12,25 @@ from telegram.ext import (
     filters,
 )
 
-import threading
-import os
-from flask import Flask
+# ==========================================
+# 1. إعداد سيرفر الويب (Flask) لإبقاء Render نشطاً
+# ==========================================
+flask_app = Flask(__name__)
 
-# إنشاء تطبيق وهمي لـ Render
-app = Flask(__name__)
-
-@app.route('/')
+@flask_app.route('/')
 def home():
     return "Bot is running!"
 
 def run_web():
     port = int(os.environ.get("PORT", 8080))
-    app.run(host="0.0.0.0", port=port)
+    flask_app.run(host="0.0.0.0", port=port)
 
-# تشغيل سيرفر الويب في خلفية مستقلة قبل تشغيل البوت
+# تشغيل سيرفر الويب في خلفية مستقلة (Daemon Thread)
 threading.Thread(target=run_web, daemon=True).start()
 
-# --- هنا يكمل كود البوت الخص بك (run_polling ... إلخ) ---
+
 # ==========================================
-# 1. إعداد المفاتيح والروابط
+# 2. إعداد المفاتيح والمتغيرات البيئية
 # ==========================================
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN", "8971556314:AAGKW_isCvcmvc4MZ4SWUcq-aM7dmwSaJsg")
 DIFY_API_KEY = os.getenv("DIFY_API_KEY", "app-NtzsG3LiLC3Vbk5iwC0F6O7j")
@@ -43,7 +41,7 @@ user_conversations = {}
 
 
 # ==========================================
-# 2. دالة الاتصال بـ Dify API
+# 3. دالة الاتصال بـ Dify API
 # ==========================================
 def ask_dify(user_id: int, message_text: str) -> str:
     headers = {
@@ -93,18 +91,26 @@ def ask_dify(user_id: int, message_text: str) -> str:
 
 
 # ==========================================
-# 3. معالجات أوامر التليجرام (Handlers)
+# 4. معالجات أوامر التليجرام (Handlers)
 # ==========================================
+
+# دالة التعامل مع أمر البداية /start
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    welcome_msg = "أهلاً بك في بوت (مصداق) لتوثيق الأحاديث الشريفة. أرسل نص الحديث للتحقق منه."
-    await update.message.reply_text(welcome_msg)
+    welcome_msg = (
+        "أهلاً بك في **بوت مصداق** 🕊️✨\n\n"
+        "أنا هنا لمساعدتك في **التحقق من صحة الأحاديث النبوية الشريفة**، والتمييز بين الأحاديث الصحيحة والضعيفة أو الموضوعة.\n\n"
+        "💬 **طريقة الاستخدام:**\n"
+        "أرسل لي نص الحديث أو جزءاً منه في المحادثة مباشرة، وسأقوم بالتحقق منه فوراً!"
+    )
+    await update.message.reply_text(welcome_msg, parse_mode='Markdown')
 
 
+# دالة التعامل مع الرسائل النصية الموجهة لـ Dify
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     user_text = update.message.text
 
-    # إظهار حالة "جاري الكتابة..." للمستخدم
+    # إظهار حالة "جاري الكتابة..." للمستخدم أثناء معالجة الطلب
     await context.bot.send_chat_action(chat_id=update.effective_chat.id, action=ChatAction.TYPING)
 
     # إرسال السؤال لـ Dify واستلام الرد
@@ -115,13 +121,15 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 # ==========================================
-# 4. تشغيل البوت
+# 5. تشغيل البوت
 # ==========================================
 if __name__ == "__main__":
     print("🚀 البوت يعمل الآن وجاهز للاستقبال...")
-    app = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
+    bot_app = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
 
-    app.add_handler(CommandHandler("start", start))
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
+    # إضافة المعالجات (Handlers)
+    bot_app.add_handler(CommandHandler("start", start))
+    bot_app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 
-    app.run_polling()
+    # بدء استقبال الرسائل عبر Polling
+    bot_app.run_polling()
